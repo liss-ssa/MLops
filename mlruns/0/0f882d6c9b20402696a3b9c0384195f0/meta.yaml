@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/HUAWEI/Desktop/MLOps/mlruns/0/0f882d6c9b20402696a3b9c0384195f0/artifacts
+end_time: 1742454454737
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 0f882d6c9b20402696a3b9c0384195f0
+run_name: XGBRegressor
+run_uuid: 0f882d6c9b20402696a3b9c0384195f0
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1742454451200
+status: 3
+tags: []
+user_id: HUAWEI

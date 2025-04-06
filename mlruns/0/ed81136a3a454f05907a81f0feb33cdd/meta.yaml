@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/HUAWEI/Desktop/MLOps/mlruns/0/ed81136a3a454f05907a81f0feb33cdd/artifacts
+end_time: 1742454956902
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: ed81136a3a454f05907a81f0feb33cdd
+run_name: merciful-elk-106
+run_uuid: ed81136a3a454f05907a81f0feb33cdd
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1742454953543
+status: 3
+tags: []
+user_id: HUAWEI
