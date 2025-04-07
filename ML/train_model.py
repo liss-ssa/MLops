@@ -13,9 +13,9 @@ def eval_metrics(actual, pred):
     return rmse, mae, r2
 
 if __name__ == "__main__":
-    X_scaled = joblib.load('data/X_scaled.pkl')
-    y_scaled = joblib.load('data/y_scaled.pkl')
-    power_trans = joblib.load('data/power_trans.pkl')
+    X_scaled = joblib.load('/X_scaled.pkl')
+    y_scaled = joblib.load('/y_scaled.pkl')
+    power_trans = joblib.load('/power_trans.pkl')
 
     X_train, X_val, y_train, y_val = train_test_split(X_scaled, y_scaled, test_size=0.3, random_state=42)
 
