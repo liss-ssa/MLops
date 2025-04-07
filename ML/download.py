@@ -24,6 +24,6 @@ if __name__ == "__main__":
     X_scaled, y_scaled, power_trans = scale_features(X, y)
 
     #данные для последующего использования
-    joblib.dump(X_scaled, 'data/X_scaled.pkl')
-    joblib.dump(y_scaled, 'data/y_scaled.pkl')
-    joblib.dump(power_trans, 'data/power_trans.pkl')
+    joblib.dump(X_scaled, 'X_scaled.pkl')
+    joblib.dump(y_scaled, 'y_scaled.pkl')
+    joblib.dump(power_trans, 'power_trans.pkl')
