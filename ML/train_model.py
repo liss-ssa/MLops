@@ -13,9 +13,9 @@ def eval_metrics(actual, pred):
     return rmse, mae, r2
 
 if __name__ == "__main__":
-    X_scaled = joblib.load('/X_scaled.pkl')
-    y_scaled = joblib.load('/y_scaled.pkl')
-    power_trans = joblib.load('/power_trans.pkl')
+    X_scaled = joblib.load('X_scaled.pkl')
+    y_scaled = joblib.load('y_scaled.pkl')
+    power_trans = joblib.load('power_trans.pkl')
 
     X_train, X_val, y_train, y_val = train_test_split(X_scaled, y_scaled, test_size=0.3, random_state=42)
 
@@ -45,6 +45,6 @@ if __name__ == "__main__":
         signature = infer_signature(X_train, best_model.predict(X_train))
         mlflow.sklearn.log_model(best_model, "model", signature=signature, input_example=X_train[:5])
 
-    joblib.dump(best_model, 'models/best_model.pkl')
+    joblib.dump(best_model, 'best_model.pkl')
     with open('best_model.txt', 'w') as f:
-        f.write('models/best_model.pkl')
+        f.write('best_model.pkl')
