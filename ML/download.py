@@ -19,7 +19,7 @@ def scale_features(X, y):
     return X_scaled, y_scaled, power_trans
 
 if __name__ == "__main__":
-    file_path = 'data/Tesla.csv'
+    file_path = 'Tesla.csv'
     X, y = preprocess_tesla_data(file_path)
     X_scaled, y_scaled, power_trans = scale_features(X, y)
 
