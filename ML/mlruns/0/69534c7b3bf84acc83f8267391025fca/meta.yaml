@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/HUAWEI/Desktop/MLOps/mlruns/0/69534c7b3bf84acc83f8267391025fca/artifacts
+end_time: 1744035173816
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 69534c7b3bf84acc83f8267391025fca
+run_name: charming-shad-308
+run_uuid: 69534c7b3bf84acc83f8267391025fca
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1744035165908
+status: 3
+tags: []
+user_id: HUAWEI
