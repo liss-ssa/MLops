@@ -8,4 +8,4 @@ if __name__ == "__main__":
         path_model = f.read().strip()
 
     # Запуск MLflow сервиса
-    os.system(f"mlflow models serve -m {path_model} -p 5003 --no-conda &")
+    os.system(f"mlflow models serve -m {path_model} -p 5000 --no-conda &")
