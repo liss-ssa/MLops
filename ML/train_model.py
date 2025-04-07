@@ -39,7 +39,7 @@ if __name__ == "__main__":
     os.makedirs(artifact_path, exist_ok=True)
 
     mlflow.set_tracking_uri(f"file:{artifact_path}")
-    
+    mlflow.set_experiment('Default')
     with mlflow.start_run():
         mlflow.log_param("alpha", best_model.alpha)
         mlflow.log_param("l1_ratio", best_model.l1_ratio)
