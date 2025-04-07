@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/HUAWEI/Desktop/MLOps/mlruns/0/b37559770281498abb31b10595357aed/artifacts
+end_time: 1742454283666
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: b37559770281498abb31b10595357aed
+run_name: auspicious-rat-794
+run_uuid: b37559770281498abb31b10595357aed
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1742454280479
+status: 3
+tags: []
+user_id: HUAWEI

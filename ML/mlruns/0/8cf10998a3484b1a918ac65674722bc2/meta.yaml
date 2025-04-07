@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/HUAWEI/Desktop/MLOps/mlruns/0/8cf10998a3484b1a918ac65674722bc2/artifacts
+end_time: 1742454893179
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 8cf10998a3484b1a918ac65674722bc2
+run_name: Best_RandomForestRegressor
+run_uuid: 8cf10998a3484b1a918ac65674722bc2
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1742454889468
+status: 3
+tags: []
+user_id: HUAWEI

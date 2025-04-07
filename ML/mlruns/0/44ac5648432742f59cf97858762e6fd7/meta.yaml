@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/HUAWEI/Desktop/MLOps/mlruns/0/44ac5648432742f59cf97858762e6fd7/artifacts
+end_time: 1742453453854
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 44ac5648432742f59cf97858762e6fd7
+run_name: colorful-deer-167
+run_uuid: 44ac5648432742f59cf97858762e6fd7
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1742453445757
+status: 3
+tags: []
+user_id: HUAWEI

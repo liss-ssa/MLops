@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/HUAWEI/Desktop/MLOps/mlruns/0/209b203906c94d3d8d7ca7169d4a0566/artifacts
+end_time: 1742453860715
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 209b203906c94d3d8d7ca7169d4a0566
+run_name: shivering-mole-975
+run_uuid: 209b203906c94d3d8d7ca7169d4a0566
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1742453857498
+status: 3
+tags: []
+user_id: HUAWEI
