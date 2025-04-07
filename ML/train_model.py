@@ -34,7 +34,12 @@ if __name__ == "__main__":
     y_price_pred = power_trans.inverse_transform(y_pred.reshape(-1, 1))
 
     rmse, mae, r2 = eval_metrics(power_trans.inverse_transform(y_val), y_price_pred)
+    import os
+    artifact_path = "/var/lib/jenkins/workspace/Train model/artifacts"
+    os.makedirs(artifact_path, exist_ok=True)
 
+    mlflow.set_tracking_uri(f"file:{artifact_path}")
+    
     with mlflow.start_run():
         mlflow.log_param("alpha", best_model.alpha)
         mlflow.log_param("l1_ratio", best_model.l1_ratio)
