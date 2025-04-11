@@ -1,11 +1,8 @@
-import os
-import joblib
 import mlflow
 
-if __name__ == "__main__":
-    # Прочитать путь из файла
-    with open('best_model.txt', 'r') as f:
-        path_model = f.read().strip()
+# Установите URI для MLflow
+mlflow.set_tracking_uri(uri="http://127.0.0.1:5000")
 
-    # Запуск MLflow сервиса
-    os.system(f"mlflow models serve -m {path_model} -p 5000 --no-conda &")
+# Запуск модели как сервиса
+model_uri = "best_model.pkl" 
+mlflow.models.serve(model_uri=model_uri, host='0.0.0.0', port=5000)
