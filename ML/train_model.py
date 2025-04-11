@@ -5,6 +5,7 @@ from sklearn.linear_model import SGDRegressor
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 import mlflow
 from mlflow.models import infer_signature
+import os
 
 def eval_metrics(actual, pred):
     rmse = np.sqrt(mean_squared_error(actual, pred))
@@ -13,9 +14,10 @@ def eval_metrics(actual, pred):
     return rmse, mae, r2
 
 if __name__ == "__main__":
-    X_scaled = joblib.load('X_scaled.pkl')
-    y_scaled = joblib.load('y_scaled.pkl')
-    power_trans = joblib.load('power_trans.pkl')
+    base_path = '/var/lib/jenkins/workspace/Download/ML'
+    X_scaled = joblib.load(os.path.join(base_path, 'X_scaled.pkl'))
+    y_scaled = joblib.load(os.path.join(base_path, 'y_scaled.pkl'))
+    power_trans = joblib.load(os.path.join(base_path, 'power_trans.pkl'))
 
     X_train, X_val, y_train, y_val = train_test_split(X_scaled, y_scaled, test_size=0.3, random_state=42)
 
@@ -46,6 +48,6 @@ if __name__ == "__main__":
         signature = infer_signature(X_train, best_model.predict(X_train))
         mlflow.sklearn.log_model(best_model, "model", signature=signature, input_example=X_train[:5])
 
-    joblib.dump(best_model, 'best_model.pkl')
-    with open('best_model.txt', 'w') as f:
+    joblib.dump(best_model, os.path.join(base_path, 'best_model.pkl'))
+    with open(os.path.join(base_path, 'best_model.txt'), 'w') as f:
         f.write('best_model.pkl')
