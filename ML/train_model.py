@@ -14,7 +14,7 @@ import joblib
 mlflow.set_tracking_uri(uri="http://127.0.0.1:5000")
 
 # Загрузка данных
-file_path = 'path_to_your_data/Tesla.csv'
+file_path = 'Tesla.csv'
 df = pd.read_csv(file_path)
 
 def preprocess_tesla_data(df):
