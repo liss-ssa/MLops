@@ -13,14 +13,7 @@ def eval_metrics(actual, pred):
     r2 = r2_score(actual, pred)
     return rmse, mae, r2
 
-if __name__ == "__main__":
-    base_path = "\\wsl.localhost\Ubuntu\var\lib\jenkins\workspace\Download\ML"
-    X_scaled = joblib.load(os.path.join(base_path, 'X_scaled.pkl'))
-    y_scaled = joblib.load(os.path.join(base_path, 'y_scaled.pkl'))
-    power_trans = joblib.load(os.path.join(base_path, 'power_trans.pkl'))
-
-    X_train, X_val, y_train, y_val = train_test_split(X_scaled, y_scaled, test_size=0.3, random_state=42)
-
+def train_model(X_train, y_train, X_val, y_val, power_trans):
     params = {
         'alpha': [0.0001, 0.001, 0.01, 0.05, 0.1],
         'l1_ratio': [0.001, 0.05, 0.01, 0.2],
@@ -35,19 +28,61 @@ if __name__ == "__main__":
     y_pred = best_model.predict(X_val)
     y_price_pred = power_trans.inverse_transform(y_pred.reshape(-1, 1))
 
-    rmse, mae, r2 = eval_metrics(power_trans.inverse_transform(y_val), y_price_pred)
+    return best_model, *eval_metrics(power_trans.inverse_transform(y_val), y_price_pred)
 
-    mlflow.set_experiment('Default')
+if __name__ == "__main__":
+    # Убедитесь, что пути соответствуют вашей структуре проекта
+    base_path = os.path.join(os.path.dirname(__file__), 'data')
+    os.makedirs(base_path, exist_ok=True)
+    
+    # Загрузка предобработанных данных
+    X_scaled = joblib.load(os.path.join(base_path, 'X_scaled.pkl'))
+    y_scaled = joblib.load(os.path.join(base_path, 'y_scaled.pkl'))
+    power_trans = joblib.load(os.path.join(base_path, 'power_trans.pkl'))
+
+    # Разделение данных
+    X_train, X_val, y_train, y_val = train_test_split(
+        X_scaled, y_scaled, test_size=0.3, random_state=42
+    )
+
+    # Настройка MLflow
+    mlflow.set_tracking_uri("http://localhost:5000")  # или ваш URL MLflow
+    mlflow.set_experiment('SGD_Regression')
+    
+    # Обучение и логирование модели
     with mlflow.start_run():
-        mlflow.log_param("alpha", best_model.alpha)
-        mlflow.log_param("l1_ratio", best_model.l1_ratio)
-        mlflow.log_param("penalty", best_model.penalty)
-        mlflow.log_metric("rmse", rmse)
-        mlflow.log_metric("mae", mae)
-        mlflow.log_metric("r2", r2)
-        signature = infer_signature(X_train, best_model.predict(X_train))
-        mlflow.sklearn.log_model(best_model, "model", signature=signature, input_example=X_train[:5])
+        model, rmse, mae, r2, predictions = train_model(
+            X_train, y_train, X_val, y_val, power_trans
+        )
+        
+        # Логирование параметров и метрик
+        mlflow.log_params(model.get_params())
+        mlflow.log_metrics({
+            'rmse': rmse,
+            'mae': mae,
+            'r2': r2
+        })
+        
+        # Логирование модели
+        signature = infer_signature(X_train, model.predict(X_train))
+        mlflow.sklearn.log_model(
+            model, 
+            "model", 
+            signature=signature,
+            input_example=X_train[:5]
+        )
+        
+        # Сохранение модели
+        model_path = os.path.join(base_path, 'best_model.pkl')
+        joblib.dump(model, model_path)
+        mlflow.log_artifact(model_path)
+        
+        # Сохранение информации о модели
+        with open(os.path.join(base_path, 'model_info.txt'), 'w') as f:
+            f.write(f"Model: SGDRegressor\n")
+            f.write(f"RMSE: {rmse}\n")
+            f.write(f"MAE: {mae}\n")
+            f.write(f"R2: {r2}\n")
+            f.write(f"Saved to: {model_path}\n")
 
-    joblib.dump(best_model, os.path.join(base_path, 'best_model.pkl'))
-    with open(os.path.join(base_path, 'best_model.txt'), 'w') as f:
-        f.write('best_model.pkl')
+    print(f"Training completed. Model saved to {model_path}")
