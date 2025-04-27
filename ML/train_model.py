@@ -14,7 +14,7 @@ def eval_metrics(actual, pred):
     return rmse, mae, r2
 
 if __name__ == "__main__":
-    base_path = '//wsl.localhost/Ubuntu/var/lib/jenkins/workspace/Download/ML'
+    base_path = "\\wsl.localhost\Ubuntu\var\lib\jenkins\workspace\Download\ML"
     X_scaled = joblib.load(os.path.join(base_path, 'X_scaled.pkl'))
     y_scaled = joblib.load(os.path.join(base_path, 'y_scaled.pkl'))
     power_trans = joblib.load(os.path.join(base_path, 'power_trans.pkl'))
