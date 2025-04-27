@@ -13,47 +13,49 @@ def eval_metrics(actual, pred):
     r2 = r2_score(actual, pred)
     return rmse, mae, r2
 
-def load_data(base_path):
+def load_data(directory):
     """Загрузка предобработанных данных с проверкой существования файлов"""
     required_files = ['X_scaled.pkl', 'y_scaled.pkl', 'power_trans.pkl']
     for file in required_files:
-        if not os.path.exists(os.path.join(base_path, file)):
-            raise FileNotFoundError(f"Required file {file} not found in {base_path}")
+        if not os.path.exists(os.path.join(directory, file)):
+            raise FileNotFoundError(f"Required file {file} not found in {directory}")
     
     return (
-        joblib.load(os.path.join(base_path, 'X_scaled.pkl')),
-        joblib.load(os.path.join(base_path, 'y_scaled.pkl')),
-        joblib.load(os.path.join(base_path, 'power_trans.pkl'))
+        joblib.load(os.path.join(directory, 'X_scaled.pkl')),
+        joblib.load(os.path.join(directory, 'y_scaled.pkl')),
+        joblib.load(os.path.join(directory, 'power_trans.pkl'))
     )
 
 if __name__ == "__main__":
     try:
-        # Определяем базовый путь относительно расположения скрипта
-        base_path = os.path(os.path.dirname(__file__))
-        os.makedirs(base_path, exist_ok=True)
+        # Путь к директории ML (где лежат .pkl файлы)
+        ml_dir = os.path.dirname(os.path.abspath(__file__))
+        print(f"Loading data from: {ml_dir}")
         
-        print(f"Loading data from: {base_path}")
-        X_scaled, y_scaled, power_trans = load_data(base_path)
+        # Загрузка данных
+        X_scaled, y_scaled, power_trans = load_data(ml_dir)
         
+        # Разделение данных
         X_train, X_val, y_train, y_val = train_test_split(
             X_scaled, y_scaled, test_size=0.3, random_state=42
         )
 
+        # Параметры для GridSearch
         params = {
             'alpha': [0.0001, 0.001, 0.01, 0.05, 0.1],
             'l1_ratio': [0.001, 0.05, 0.01, 0.2],
             'penalty': ['l1', 'l2', 'elasticnet'],
         }
 
-        print("Training model...")
+        print("Training SGDRegressor model...")
         lr = SGDRegressor(random_state=42)
         clf = GridSearchCV(lr, params, cv=5)
         clf.fit(X_train, y_train.ravel())
         best_model = clf.best_estimator_
 
+        # Предсказание и оценка
         y_pred = best_model.predict(X_val)
         y_price_pred = power_trans.inverse_transform(y_pred.reshape(-1, 1))
-
         rmse, mae, r2 = eval_metrics(power_trans.inverse_transform(y_val), y_price_pred)
 
         print(f"Model trained with metrics: RMSE={rmse:.2f}, MAE={mae:.2f}, R2={r2:.2f}")
@@ -63,13 +65,21 @@ if __name__ == "__main__":
         mlflow.set_experiment('SGD_Regression')
         
         with mlflow.start_run():
-            mlflow.log_param("alpha", best_model.alpha)
-            mlflow.log_param("l1_ratio", best_model.l1_ratio)
-            mlflow.log_param("penalty", best_model.penalty)
-            mlflow.log_metric("rmse", rmse)
-            mlflow.log_metric("mae", mae)
-            mlflow.log_metric("r2", r2)
+            # Логирование параметров
+            mlflow.log_params({
+                'alpha': best_model.alpha,
+                'l1_ratio': best_model.l1_ratio,
+                'penalty': best_model.penalty
+            })
             
+            # Логирование метрик
+            mlflow.log_metrics({
+                'rmse': rmse,
+                'mae': mae,
+                'r2': r2
+            })
+            
+            # Логирование модели
             signature = infer_signature(X_train, best_model.predict(X_train))
             mlflow.sklearn.log_model(
                 best_model, 
@@ -78,8 +88,8 @@ if __name__ == "__main__":
                 input_example=X_train[:5]
             )
 
-            # Сохранение модели
-            model_path = os.path.join(base_path, 'best_model.pkl')
+            # Сохранение модели в ту же директорию
+            model_path = os.path.join(ml_dir, 'best_model.pkl')
             joblib.dump(best_model, model_path)
             print(f"Model saved to: {model_path}")
 
