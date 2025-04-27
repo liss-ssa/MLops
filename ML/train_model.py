@@ -29,7 +29,7 @@ def load_data(base_path):
 if __name__ == "__main__":
     try:
         # Определяем базовый путь относительно расположения скрипта
-        base_path = os.path.join(os.path.dirname(__file__), 'data')
+        base_path = os.path(os.path.dirname(__file__))
         os.makedirs(base_path, exist_ok=True)
         
         print(f"Loading data from: {base_path}")
