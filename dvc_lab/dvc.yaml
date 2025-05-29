@@ -1,0 +1,35 @@
+stages:
+  prepare:
+    cmd: python src/prepare.py
+    deps:
+      - data/raw/Tesla.csv
+      - src/prepare.py
+    outs:
+      - data/processed/cleaned.csv
+    params:
+      - prepare.input_file
+      - prepare.output_file
+      - prepare.features_to_drop
+
+  train:
+    cmd: python src/train.py
+    deps:
+      - data/processed/cleaned.csv
+      - src/train.py
+    outs:
+      - models/rf_model.joblib
+    params:
+      - train.n_estimators
+      - train.max_depth
+      - train.random_state
+
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+      - models/rf_model.joblib
+      - data/processed/cleaned.csv
+      - src/evaluate.py
+    outs:
+      - metrics/eval.json
+    params:
+      - evaluate.metrics_file

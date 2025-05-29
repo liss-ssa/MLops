@@ -1,0 +1,68 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python src/prepare.py
+    deps:
+    - path: data/raw/Tesla.csv
+      hash: md5
+      md5: 6c71cd7aa81261835ddf089d4e7d4cb4
+      size: 109953
+    - path: src/prepare.py
+      hash: md5
+      md5: bf11118ae0d6d54cd0ee4b0ee70d56a8
+      size: 584
+    params:
+      params.yaml:
+        prepare.features_to_drop:
+        - Adj Close
+        prepare.input_file: data/raw/Tesla.csv
+        prepare.output_file: data/processed/cleaned.csv
+    outs:
+    - path: data/processed/cleaned.csv
+      hash: md5
+      md5: f9b42f168260aa4371e627286b3ba647
+      size: 139382
+  train:
+    cmd: python src/train.py
+    deps:
+    - path: data/processed/cleaned.csv
+      hash: md5
+      md5: f9b42f168260aa4371e627286b3ba647
+      size: 139382
+    - path: src/train.py
+      hash: md5
+      md5: 3fbe0b19bcc262acc76af92b02b2ae49
+      size: 454
+    params:
+      params.yaml:
+        train.max_depth: 5
+        train.n_estimators: 100
+        train.random_state: 42
+    outs:
+    - path: models/rf_model.joblib
+      hash: md5
+      md5: 95a9c308e35407765ed6219a5012626d
+      size: 15241297
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+    - path: data/processed/cleaned.csv
+      hash: md5
+      md5: f9b42f168260aa4371e627286b3ba647
+      size: 139382
+    - path: models/rf_model.joblib
+      hash: md5
+      md5: 95a9c308e35407765ed6219a5012626d
+      size: 15241297
+    - path: src/evaluate.py
+      hash: md5
+      md5: 62f31f7848423b05dd4ea40713598fcf
+      size: 782
+    params:
+      params.yaml:
+        evaluate.metrics_file: metrics/eval.json
+    outs:
+    - path: metrics/eval.json
+      hash: md5
+      md5: 133614dfd2d85b8a115434d8c729ad8e
+      size: 109
